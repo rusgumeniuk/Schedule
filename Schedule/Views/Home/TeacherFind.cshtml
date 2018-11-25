@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Schedule.Models.Teacher>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>TeacherFind</title>
+</head>
+<body>
+    @Html.Partial("Header");
+    <table>
+        @foreach (var group in Model)
+        {
+            <tr>
+                <td>
+                    @group.Id
+                </td>
+                <td>
+                    @group.Title
+                </td>
+                <td>
+                    <a href="~/Home/TeacherSchedule">Look on teacher schedule</a>
+                </td>
+            </tr>
+        }
+    </table>
+</body>
+</html>
