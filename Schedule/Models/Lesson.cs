@@ -1,5 +1,6 @@
 ﻿using Schedule.Models.Enums;
 using System;
+using System.Collections.Generic;
 
 namespace Schedule.Models
 {
@@ -80,6 +81,25 @@ namespace Schedule.Models
             this.DayOfWeek = dayOfWeek;
             this.LessonNumber = lessonNumber;
             this.LessonType = lessonType;            
+        }        
+    }
+
+    public class LessonComparer : IComparer<Lesson>
+    {
+        public int Compare(Lesson x, Lesson y)
+        {
+            if (x.DayOfWeek > y.DayOfWeek)
+                return 1;
+            else if (x.DayOfWeek < y.DayOfWeek)
+                return -1;
+            else
+            {
+                if (x.LessonNumber > y.LessonNumber)
+                    return 1;
+                else if (x.LessonNumber < y.LessonNumber)
+                    return -1;
+                else return 0;
+            }
         }
     }
 }
