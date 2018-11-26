@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Schedule.Models.Teacher>
+﻿@model IEnumerable<Teacher>
 
 @{
     Layout = null;
@@ -12,22 +12,15 @@
     <title>TeacherFind</title>
 </head>
 <body>
-    @Html.Partial("Header");
-    <table>
-        @foreach (var group in Model)
-        {
-            <tr>
-                <td>
-                    @group.Id
-                </td>
-                <td>
-                    @group.Title
-                </td>
-                <td>
-                    <a href="~/Home/TeacherSchedule">Look on teacher schedule</a>
-                </td>
-            </tr>
-        }
-    </table>
+    @Html.Partial("Header")
+    <form asp-controller="Home" asp-action="TeacherSchedule" method="post">
+        <select name="id">
+            @foreach (var teacher in Model)
+            {
+                <option value=@teacher.Id>@teacher.Title</option>
+            }
+        </select>
+        <input type="submit" value="Show schedule" />
+    </form>
 </body>
 </html>

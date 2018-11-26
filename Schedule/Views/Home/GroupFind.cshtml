@@ -2,35 +2,24 @@
 @{
     Layout = null;
 }
-@model  List<Group>
-<!DOCTYPE html>
+@model IEnumerable<Group>
 
+<!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Group find</title>
 </head>
 <body>
-    @Html.Partial("Header");
-    <form method="post" action="~/Home/GroupSchedule">
-        <table>
+    @Html.Partial("Header")
+    <form asp-controller="Home" asp-action="GroupSchedule" method="post">
+        <select name="id">
             @foreach (var group in Model)
             {
-                <tr>
-                    <td>
-                        @group.Id
-                    </td>
-                    <td>
-                        @group.Title
-                    </td>
-                    <td>
-                        <input type="submit" value="GO">
-                        @*<a href="~/Home/GroupSchedule">Look on group schedule</a>*@
-                    </td>
-                </tr>
+                <option value=@group.Id>@group.Title</option>
             }
-        </table>
+        </select>
+        <input type="submit" value="Show schedule" />
     </form>
-      
 </body>
 </html>
