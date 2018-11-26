@@ -4,7 +4,7 @@ namespace Schedule.Models
 {
     public class Build : Base<Build>
     {
-        public readonly byte MAX_COUNT_OF_ROOMS_ON_STOREY = 100;
+        public readonly ushort MAX_COUNT_OF_ROOMS_ON_STOREY = 600;
         public readonly byte CountOfStoreys;
         public readonly byte Number;
 

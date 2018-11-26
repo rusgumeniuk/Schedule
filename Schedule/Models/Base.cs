@@ -9,7 +9,7 @@ namespace Schedule.Models
     {
         public static Dictionary<Guid, T> Items = new Dictionary<Guid, T>();
 
-        public Guid Id { get; protected set; }        
+        public Guid Id { get; set; }        
 
         public Base()
         {

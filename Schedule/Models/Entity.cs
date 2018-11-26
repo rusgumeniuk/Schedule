@@ -20,7 +20,7 @@ namespace Schedule.Models
                     throw new ArgumentException($"Wrong title:{value}");
                 }
             }
-        }
+        }        
 
         public Entity() : base()
         {            
