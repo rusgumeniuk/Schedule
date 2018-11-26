@@ -34,5 +34,18 @@ namespace Schedule.Models
                 return res;
             }
         }
+        public IEnumerable<Lesson> Lessons
+        {
+            get
+            {
+                List<Lesson> lessons = new List<Lesson>();
+                foreach (var lesson in Lesson.Items.Values)
+                {
+                    if (lesson.SubjectId == Id)
+                        lessons.Add(lesson);
+                }
+                return lessons;
+            }
+        }
     }
 }
