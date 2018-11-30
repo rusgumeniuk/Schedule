@@ -1,16 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Schedule.Models;
 using System;
-using System.Collections.Generic;
+using Schedule.Models.Contexts;
 
 namespace Schedule.Controllers
 {
     public class HomeController : Controller
     {
+        GroupContext groupDb;
+        TeacherContext teacherDb;
+        SubjectContext subjectDb;
+        BuildContext buildDb;
+        RoomContext roomDb;
+        LessonContext lessonDb;
+
         static HomeController()
         {
             Teacher firstTeacher = new Teacher() { Title = "First Teacher" };
-            Teacher secondTeacher = new Teacher() { Title = "Second Teacher" };
+            Teacher secondTeacher = new Teacher() { Title = "Second Teacher" };           
 
             Group firstGroup = new Group() { Title = "First Group" };
             Group it62 = new Group() { Title = "IT-62" };
@@ -35,6 +42,54 @@ namespace Schedule.Controllers
             Lesson eng62Lecture = new Lesson(english.Id, secondTeacher.Id, it62.Id, engLectureRoom.Id,
                 Models.Enums.WeekMode.Both, DayOfWeek.Tuesday, Models.Enums.LessonNumber.First, Models.Enums.LessonType.Lecture);
         }
+        public HomeController(GroupContext groupContext, TeacherContext teacherContext, SubjectContext subjectContext, BuildContext buildContext, RoomContext roomContext
+            , LessonContext lessonContext)
+        {
+            groupDb = groupContext;
+            teacherDb = teacherContext;
+            subjectDb = subjectContext;
+            buildDb = buildContext;
+            roomDb = roomContext;
+            lessonDb = lessonContext;
+
+            foreach (var item in Group.Items.Values)
+            {
+                groupDb.Groups.Add(item);
+            }
+            groupDb.SaveChanges();
+
+            foreach (var item in Teacher.Items.Values)
+            {
+                teacherDb.Teachers.Add(item);
+            }
+            teacherDb.SaveChanges();
+
+
+            foreach (var item in Subject.Items.Values)
+            {
+                subjectDb.Subjects.Add(item);
+            }
+            subjectDb.SaveChanges();
+
+
+            foreach (var item in Build.Items.Values)
+            {
+                buildDb.Builds.Add(item);
+            }
+            buildDb.SaveChanges();
+
+            foreach (var item in Room.Items.Values)
+            {
+                roomDb.Rooms.Add(item);
+            }
+            roomDb.SaveChanges();
+
+            foreach (var item in Lesson.Items.Values)
+            {
+                lessonDb.Lessons.Add(item);
+            }
+            lessonDb.SaveChanges();            
+        }
         public IActionResult Index()
         {
             return View();
@@ -51,7 +106,7 @@ namespace Schedule.Controllers
 
         [HttpPost]
         public IActionResult GroupSchedule(Guid id)
-        {            
+        {
             return View(Group.Items[id]);
         }
         [HttpPost]

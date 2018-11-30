@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Schedule.Models
 {
-    public class Entity<T> : Base<T> where T:Entity<T>
+    public class Entity<T> : Base<T> where T : Entity<T>
     {
         private string title;
         public string Title
@@ -20,15 +19,15 @@ namespace Schedule.Models
                     throw new ArgumentException($"Wrong title:{value}");
                 }
             }
-        }        
+        }
 
         public Entity() : base()
-        {            
-            Title = $"{GetType().Name}{DateTime.Now.Millisecond}";            
+        {
+            Title = $"{GetType().Name}{DateTime.Now.Millisecond}";
         }
         public Entity(string title) : this()
         {
             Title = title;
-        }        
+        }
     }
 }

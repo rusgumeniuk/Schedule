@@ -47,6 +47,6 @@ namespace Schedule.Models
                 }
                 return lessons;
             }
-        }
+        }        
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Schedule.Models
 {
@@ -9,12 +7,12 @@ namespace Schedule.Models
     {
         public static Dictionary<Guid, T> Items = new Dictionary<Guid, T>();
 
-        public Guid Id { get; set; }        
+        public Guid Id { get; set; }
 
         public Base()
         {
-            this.Id = Guid.NewGuid();            
-            Items.Add(this.Id, (T)this);
+            Id = Guid.NewGuid();
+            Items.Add(Id, (T)this);
         }
     }
 }
