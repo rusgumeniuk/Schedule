@@ -1,11 +1,6 @@
 ﻿@model IEnumerable<Teacher>
 
-@{
-    Layout = null;
-}
-
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -13,7 +8,8 @@
 </head>
 <body>
     @Html.Partial("Header")
-    <form asp-controller="Home" asp-action="TeacherSchedule" method="post">
+    <h3 style="text-align:center">Select a teacher</h3>
+    <form asp-controller="Home" asp-action="TeacherSchedule" method="post" style="text-align:center" >
         <select name="id">
             @foreach (var teacher in Model)
             {

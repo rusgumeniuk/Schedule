@@ -1,8 +1,4 @@
-﻿
-@{
-    Layout = null;
-}
-@model IEnumerable<Group>
+﻿@model IEnumerable<Group>
 
 <!DOCTYPE html>
 <html>
@@ -12,7 +8,8 @@
 </head>
 <body>
     @Html.Partial("Header")
-    <form asp-controller="Home" asp-action="GroupSchedule" method="post">
+    <h3 style="text-align:center">Please select group</h3>
+    <form asp-controller="Home" asp-action="GroupSchedule" method="post" style="text-align:center">
         <select name="id">
             @foreach (var group in Model)
             {
