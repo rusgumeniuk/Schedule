@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 
-using Schedule.Models.Contexts;
+using Schedule.Models;
 
 namespace Schedule
 {
@@ -19,14 +19,9 @@ namespace Schedule
         }
 
         public void ConfigureServices(IServiceCollection services)
-        {            
-            string connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<BuildContext>(options => options.UseSqlServer(connection));
-            services.AddDbContext<RoomContext>(options => options.UseSqlServer(connection));
-            services.AddDbContext<TeacherContext>(options => options.UseSqlServer(connection));
-            services.AddDbContext<SubjectContext>(options => options.UseSqlServer(connection));
-            services.AddDbContext<GroupContext>(options => options.UseSqlServer(connection));
-            services.AddDbContext<LessonContext>(options => options.UseSqlServer(connection));
+        {
+            string connection = Configuration.GetConnectionString("ScheduleDB");
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(connection));        
 
             services.AddMvc();
         }
