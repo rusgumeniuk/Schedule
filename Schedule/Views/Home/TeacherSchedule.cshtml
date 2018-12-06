@@ -1,11 +1,6 @@
-﻿@model Schedule.Models.Teacher
-
-@{
-    Layout = null;
-}
+﻿@model Teacher
 
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -13,20 +8,14 @@
 </head>
 <body>
     @Html.Partial("Header")
-    <h1>U r looking on the schedule of the @Model.Title</h1>
-    @{
-        List<Lesson> lessons = ScheduleFormatter.SortLessons(Model.Lessons) as List<Lesson>;
-        IEnumerable<DayOfWeek> days = Enum.GetValues(typeof(DayOfWeek)).Cast<DayOfWeek>();
-        IEnumerable<LessonNumber> numbers = Enum.GetValues(typeof(LessonNumber)).Cast<LessonNumber>();
-    }
-
-    <table border="1">
+    <h1 align="center">U r looking on the schedule of the @Model.Title</h1>
+    <table border="1" align="center" style="border-collapse:collapse">
         @for (int i = 0; i < 2; ++i)
         {
             <tr>
-                @foreach (var dayOfWeek in days)
+                @foreach (var dayOfWeek in ViewBag.Days)
                 {
-                    <td>
+                    <td align="center">
                         <h3>
                             <b>
                                 @dayOfWeek
@@ -36,18 +25,18 @@
                 }
             </tr>
             <tr>
-                @foreach (var day in days)
+                @foreach (var day in ViewBag.Days)
                 {
-                    <td>
+                    <td align="center">
                         <table border="1">
-                            @foreach (var number in numbers)
+                            @foreach (var number in ViewBag.Numbers)
                             {
                                 <tr>
-                                    <td>
+                                    <td align="center">
                                         <i>
                                             @number
                                         </i>
-                                        @foreach (var lesson in lessons)
+                                        @foreach (var lesson in ViewBag.Lessons)
                                         {
                                             if (lesson.LessonNumber == number && lesson.DayOfWeek == day && (lesson.WeekMode == WeekMode.Both || lesson.WeekMode == (WeekMode)(i + 1)))
                                             {
