@@ -4,84 +4,39 @@ using System.Collections.Generic;
 
 namespace Schedule.Models
 {
-    public class Lesson : Base<Lesson>
+    public class Lesson : Base
     {
-        public readonly LessonNumber LessonNumber;
-        public readonly DayOfWeek DayOfWeek;
-        public readonly WeekMode WeekMode;
-        public readonly LessonType LessonType;
+        public LessonNumber LessonNumber { get; set; }
+        public DayOfWeek DayOfWeek { get; set; }
+        public WeekMode WeekMode { get; set; }
+        public LessonType LessonType { get; set; }
 
-        public readonly Guid RoomId;
-        public readonly Guid SubjectId;
-        public readonly Guid GroupId;
-        public readonly Guid TeacherId;
+        public Room Room { get; set; }
+        public Subject Subject { get; set; }
+        public Teacher Teacher { get; set; }
+        public Group Group { get; set; }
 
-        public Subject Subject
+        private Lesson() { }
+        public Lesson(Subject subject, Teacher teacher, Group group, Room room) : base()
         {
-            get
-            {
-                foreach (var subject in Subject.Items)
-                {
-                    if (subject.Key == this.SubjectId)
-                    {
-                        return subject.Value;
-                    }
-                }
-                Items.Remove(Id);
-                throw new ArgumentException($"Wrong ID! We should delete this connection, sorry");
-            }
-        }
-        public Teacher Teacher
-        {
-            get
-            {
-                foreach (var teacher in Teacher.Items)
-                {
-                    if (teacher.Key == this.TeacherId)
-                    {
-                        return teacher.Value;
-                    }
-                }
-                Items.Remove(Id);
-                throw new ArgumentException($"Wrong ID! We should delete this connection, sorry");
-            }
-        }
-        public Group Group
-        {
-            get
-            {
-                foreach (var group in Group.Items)
-                {
-                    if (group.Key == this.GroupId)
-                    {
-                        return group.Value;
-                    }
-                }
-                Items.Remove(Id);
-                throw new ArgumentException($"Wrong ID! We should delete this connection, sorry");
-            }
-        }
-
-        public Lesson(Guid subjectId, Guid teacherId, Guid groupId, Guid roomId) : base()
-        {
-            this.SubjectId = subjectId;
-            this.TeacherId = teacherId;
-            this.GroupId = groupId;
-            this.RoomId = roomId;
+            this.Subject = subject;
+            this.Teacher = teacher;
+            this.Group = group;
+            this.Room = room;
 
             this.WeekMode = WeekMode.Both;
             this.DayOfWeek = DayOfWeek.Monday;
             this.LessonNumber = LessonNumber.First;
-            this.LessonType = LessonType.Lecture;            
+            this.LessonType = LessonType.Lecture;
         }
-        public Lesson(Guid subjectId, Guid teacherId, Guid groupId, Guid roomId,
-            WeekMode weekMode, DayOfWeek dayOfWeek, LessonNumber lessonNumber, LessonType lessonType) : this(subjectId, teacherId, groupId, roomId)
+        public Lesson(Subject subject, Teacher teacher, Group group, Room room,
+            WeekMode weekMode, DayOfWeek dayOfWeek, LessonNumber lessonNumber, LessonType lessonType) : this(subject, teacher, group, room)
         {
             this.WeekMode = weekMode;
             this.DayOfWeek = dayOfWeek;
             this.LessonNumber = lessonNumber;
-            this.LessonType = lessonType;            
-        }        
+            this.LessonType = lessonType;
+        }
     }
 
     public class LessonComparer : IComparer<Lesson>
