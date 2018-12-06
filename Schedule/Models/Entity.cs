@@ -2,7 +2,7 @@
 
 namespace Schedule.Models
 {
-    public class Entity<T> : Base<T> where T : Entity<T>
+    public class Entity : Base
     {
         private string title;
         public string Title
@@ -28,6 +28,11 @@ namespace Schedule.Models
         public Entity(string title) : this()
         {
             Title = title;
+        }
+
+        public override string ToString()
+        {
+            return title;
         }
     }
 }
