@@ -1,18 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Schedule.Models
 {
-    public class Base<T> where T : Base<T>
+    public class Base
     {
-        public static Dictionary<Guid, T> Items = new Dictionary<Guid, T>();
-
         public Guid Id { get; set; }
 
         public Base()
         {
             Id = Guid.NewGuid();
-            Items.Add(Id, (T)this);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj) && (obj.GetType().Equals(this.GetType())) && (obj as Base).Id.Equals(this.Id);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, DateTime.Now.Millisecond);
         }
     }
 }
