@@ -42,7 +42,7 @@ namespace Schedule.Controllers
                 .Where(les => les.Group.Id.Equals(id));
 
             FillViewBag(lessons);
-            return View((db.Groups as IQueryable<Group>).FirstOrDefault(gr => gr.Id.Equals(id)));
+            return View("Schedule", (db.Groups as IQueryable<Group>).FirstOrDefault(gr => gr.Id.Equals(id)));
         }
         [HttpPost]
         public IActionResult TeacherSchedule(Guid id)
@@ -56,7 +56,7 @@ namespace Schedule.Controllers
                .Where(lesson => lesson.Teacher.Id.Equals(id));
 
             FillViewBag(lessons);
-            return View((db.Teachers as IQueryable<Teacher>).FirstOrDefault(teacher => teacher.Id.Equals(id)));
+            return View("Schedule", (db.Teachers as IQueryable<Teacher>).FirstOrDefault(teacher => teacher.Id.Equals(id)));
         }
 
         private void FillViewBag(IEnumerable<Lesson> lessons)
@@ -67,8 +67,8 @@ namespace Schedule.Controllers
         }
     }
 }
-//    Teacher firstTeacher = new Teacher() { Title = "First Teacher" };
-//    Teacher secondTeacher = new Teacher() { Title = "Second Teacher" };                       
+//    Teacher firstTeacher = new Teacher() { Title = "Humeniuk" };
+//    Teacher secondTeacher = new Teacher() { Title = "Olexiuk" };                       
 
 //    Group it62 = new Group() { Title = "IT-62" };
 //    Group it52 = new Group() { Title = "IA-52" };

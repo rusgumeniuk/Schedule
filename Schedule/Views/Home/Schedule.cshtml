@@ -1,0 +1,63 @@
+﻿@model Schedule.Models.Entity
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Schedule</title>
+</head>
+<body>
+    @Html.Partial("Header")    
+    <h1 align="center">U r looking on the schedule of the @Model.Title</h1>
+    <table border="1" align="center" style="border-collapse:collapse">
+        @for (int i = 0; i < 2; ++i)
+        {
+            <tr>
+                @foreach (var dayOfWeek in ViewBag.Days)
+                {
+                    <th align="center">
+                        <h3>
+                            <b>
+                                @dayOfWeek
+                            </b>
+                        </h3>
+                    </th>
+                }
+            </tr>
+            <tr>
+                @foreach (var day in ViewBag.Days)
+                {
+                    <td align="center">
+                        <table border="0">
+                            @foreach (var number in ViewBag.Numbers)
+                            {
+                                <tr>
+                                    <td align="center" style="border:inset">
+                                        <i>
+                                            @number
+                                        </i>
+                                        @foreach (Lesson lesson in ViewBag.Lessons)
+                                        {
+                                            if (lesson.LessonNumber == number && lesson.DayOfWeek == day && (lesson.WeekMode == WeekMode.Both || lesson.WeekMode == (WeekMode)(i + 1)))
+                                            {
+                                                <br />
+                                                <table>                                              
+                                                    <tr>@lesson.Subject.Title</tr><br />
+                                                    <tr style="font-size:x-small; align-content:flex-end">@lesson.LessonType</tr><br />
+                                                    <tr>@lesson.Teacher</tr><br />
+                                                    <tr>@lesson.Room</tr><br />
+                                                </table>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </td>
+                }
+            </tr>
+            <tr></tr>
+        }
+    </table>
+</body>
+</html>
