@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Teacher>
+﻿@model IEnumerable<ResponseTeacherData>
 
 <!DOCTYPE html>
 <html>
@@ -11,9 +11,9 @@
     <h3 style="text-align:center">Select a teacher</h3>
     <form asp-controller="Home" asp-action="TeacherSchedule" method="post" style="text-align:center" >
         <select name="id">
-            @foreach (var teacher in Model)
+            @foreach (ResponseTeacherData teacher in Model)
             {
-                <option value=@teacher.Id>@teacher.Title</option>
+                <option value=@teacher.Id>@teacher.FullName</option>
             }
         </select>
         <input type="submit" value="Show schedule" />
