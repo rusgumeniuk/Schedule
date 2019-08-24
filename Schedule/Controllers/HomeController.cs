@@ -39,10 +39,9 @@ namespace Schedule.Controllers
         }
 
         [HttpPost]
-        public IActionResult GroupSchedule(int id)
+        public async Task<IActionResult> GroupSchedule(int id)
         {
-            var res = GetScheduleForGroup(id);
-            return View(res);
+            return View(await GetScheduleForGroup(id));
         }
         [HttpPost]
         public IActionResult TeacherSchedule(int id)
