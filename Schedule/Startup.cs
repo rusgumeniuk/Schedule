@@ -24,6 +24,7 @@ namespace Schedule
             services.AddDbContext<DataContext>(options => options.UseSqlServer(connection));        
 
             services.AddMvc();
+            services.AddHttpClient();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
