@@ -5,47 +5,47 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Schedule.Models.Enums;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+using Schedule.Models.JsonHelpers;
+using Newtonsoft.Json;
 
 namespace Schedule.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IHttpClientFactory clientFactory;
         private readonly DataContext db;
+        private readonly string baseUrl = "https://api.rozklad.org.ua/v2/";        
 
-        public HomeController(DataContext dataContext)
+        public HomeController(DataContext dataContext, IHttpClientFactory _clientFactory)
         {
             db = dataContext;
+            clientFactory = _clientFactory;
         }
         public IActionResult Index()
-        {
+        {            
             return View();
         }
 
-        public IActionResult GroupFind()
-        {
-            return View(db.Groups);
+        public async Task<IActionResult> GroupFind()
+        {            
+            return View(await GetAllGroups());
         }
-        public IActionResult TeacherFind()
-        {
-            return View(db.Teachers);
+        public async Task<IActionResult> TeacherFind()
+        {            
+            return View(await GetAllTeachers());
         }
 
         [HttpPost]
-        public IActionResult GroupSchedule(Guid id)
+        public IActionResult GroupSchedule(int id)
         {
-            var lessons = db.Lessons
-                .Include(ls => ls.Group)
-                .Include(ls => ls.Teacher)
-                .Include(ls => ls.Room)
-                .Include(ls => ls.Subject)
-                .ToArray()
-                .Where(les => les.Group.Id.Equals(id));
-
-            FillViewBag(lessons);
-            return View("Schedule", (db.Groups as IQueryable<Group>).FirstOrDefault(gr => gr.Id.Equals(id)));
+            var res = GetScheduleForGroup(id);
+            return View(res);
         }
         [HttpPost]
-        public IActionResult TeacherSchedule(Guid id)
+        public IActionResult TeacherSchedule(int id)
         {
             var lessons = db.Lessons
                .Include(ls => ls.Group)
@@ -65,29 +65,46 @@ namespace Schedule.Controllers
             ViewBag.Numbers = Enum.GetValues(typeof(LessonNumber)).Cast<LessonNumber>();
             ViewBag.Lessons = lessons;
         }
+
+        private async Task<HttpResponseMessage> GetResponse(string requestUrl)
+        {
+            var request = new HttpRequestMessage(
+               HttpMethod.Get,
+               requestUrl
+               );
+            using (var client = clientFactory.CreateClient())
+            {
+                return await client.SendAsync(request);
+            }
+        }
+
+        private async Task<IList<ResponseGroupData>> GetAllGroups()
+        {            
+            var response = await GetResponse($"{baseUrl}groups");
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ResponseRoot<ResponseGroupData>>(response.Content.ReadAsStringAsync().Result).Data;                
+            }
+            return null;
+        }
+        private async Task<IList<ResponseTeacherData>> GetAllTeachers()
+        {
+            var response = await GetResponse($"{baseUrl}teachers");
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ResponseRoot<ResponseTeacherData>>(response.Content.ReadAsStringAsync().Result).Data;
+            }
+            return null;
+        }
+
+        private async Task<IList<ResponseLessonDataForGroup>> GetScheduleForGroup(int groupId)
+        {
+            var response = await GetResponse($"{baseUrl}groups/{groupId}/lessons");
+            if (response.IsSuccessStatusCode)
+            {                
+                return JsonConvert.DeserializeObject<ResponseRoot<ResponseLessonDataForGroup>>(response.Content.ReadAsStringAsync().Result).Data;
+            }
+            return null;
+        }
     }
 }
-//    Teacher firstTeacher = new Teacher() { Title = "Humeniuk" };
-//    Teacher secondTeacher = new Teacher() { Title = "Olexiuk" };                       
-
-//    Group it62 = new Group() { Title = "IT-62" };
-//    Group it52 = new Group() { Title = "IA-52" };
-
-//    Subject math = new Subject() { Title = "Math" };
-//    Subject english = new Subject() { Title = "English" };
-
-//    Building fict = new Building() { };
-//    Room mathLectureRoom = new Room(fict) { Number = 303 };
-//    Room mathPractRoom = new Room(fict) { Number = 428 };
-//    Room engLectureRoom = new Room(fict) { Number = 506 };
-//    Room englishPractRoom = new Room(fict) { Number = 506 };
-
-//    Lesson math62FirstLecture = new Lesson(math, firstTeacher, it62, mathLectureRoom,
-//        Models.Enums.WeekMode.Both, DayOfWeek.Monday, Models.Enums.LessonNumber.First, Models.Enums.LessonType.Lecture);
-//    Lesson math62FirstPract = new Lesson(math, firstTeacher, it62, mathPractRoom,
-//        Models.Enums.WeekMode.First, DayOfWeek.Monday, Models.Enums.LessonNumber.Second, Models.Enums.LessonType.Practice);
-
-//    Lesson eng62Pract = new Lesson(english, secondTeacher, it62, englishPractRoom,
-//        Models.Enums.WeekMode.Second, DayOfWeek.Monday, Models.Enums.LessonNumber.Second, Models.Enums.LessonType.Practice);
-//    Lesson eng62Lecture = new Lesson(english, secondTeacher, it62, engLectureRoom,
-//        Models.Enums.WeekMode.Both, DayOfWeek.Tuesday, Models.Enums.LessonNumber.First, Models.Enums.LessonType.Lecture);
