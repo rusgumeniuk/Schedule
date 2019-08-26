@@ -21,6 +21,6 @@ namespace Schedule.Models.JsonHelpers
         public Uri Url { get; set; }
 
         [JsonProperty("teacher_rating")]
-        public string TeacherRating { get; set; }
+        public double TeacherRating { get; set; }
     }
 }

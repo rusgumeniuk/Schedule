@@ -6,7 +6,7 @@ namespace Schedule.Models.JsonHelpers
         where T : IResponseData
     {
         [JsonProperty("statusCode")]
-        public long StatusCode { get; set; }
+        public ushort StatusCode { get; set; }
 
         [JsonProperty("timeStamp")]
         public long TimeStamp { get; set; }
@@ -15,7 +15,7 @@ namespace Schedule.Models.JsonHelpers
         public string Message { get; set; }
 
         [JsonProperty("debugInfo")]
-        public object DebugInfo { get; set; }
+        public string DebugInfo { get; set; }
 
         [JsonProperty("meta")]
         public ResponseMeta Meta { get; set; }        
