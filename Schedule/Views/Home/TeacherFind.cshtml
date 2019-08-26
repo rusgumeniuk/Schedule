@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ResponseTeacherData>
+﻿@model TeacherFindViewModel
 
 <!DOCTYPE html>
 <html>
@@ -9,9 +9,11 @@
 <body>
     @Html.Partial("Header")
     <h3 style="text-align:center">Select a teacher</h3>
-    <form asp-controller="Home" asp-action="TeacherSchedule" method="post" style="text-align:center" >
-        <select name="id">
-            @foreach (ResponseTeacherData teacher in Model)
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+    <form asp-controller="Home" asp-action="TeacherSchedule" method="post" style="text-align:center">
+        <span asp-validation-for="Teachers" />
+        <select name="id" id="SelectedTeacher">
+            @foreach (ResponseTeacherData teacher in Model.Teachers)
             {
                 <option value=@teacher.Id>@teacher.FullName</option>
             }

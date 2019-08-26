@@ -1,4 +1,4 @@
-﻿@model Teacher
+﻿@model TeacherScheduleViewModel
 
 <!DOCTYPE html>
 <html>
@@ -8,53 +8,12 @@
 </head>
 <body>
     @Html.Partial("Header")
-    <h1 align="center">U r looking on the schedule of the @Model.Title</h1>
-    <table border="1" align="center" style="border-collapse:collapse">
-        @for (int i = 0; i < 2; ++i)
+    <h1 align="center">U r looking on the schedule for teacher @Model.Teacher.FullName</h1>
+    <ul>
+        @foreach (var lesson in Model.Lessons)
         {
-            <tr>
-                @foreach (var dayOfWeek in ViewBag.Days)
-                {
-                    <td align="center">
-                        <h3>
-                            <b>
-                                @dayOfWeek
-                            </b>
-                        </h3>
-                    </td>
-                }
-            </tr>
-            <tr>
-                @foreach (var day in ViewBag.Days)
-                {
-                    <td align="center">
-                        <table border="1">
-                            @foreach (var number in ViewBag.Numbers)
-                            {
-                                <tr>
-                                    <td align="center">
-                                        <i>
-                                            @number
-                                        </i>
-                                        @foreach (var lesson in ViewBag.Lessons)
-                                        {
-                                            if (lesson.LessonNumber == number && lesson.DayOfWeek == day && (lesson.WeekMode == WeekMode.Both || lesson.WeekMode == (WeekMode)(i + 1)))
-                                            {
-                                                <table>
-                                                    <tr><h6>@lesson.Id</h6></tr>
-                                                    <tr><h6>@lesson.Subject.Title</h6></tr>
-                                                </table>
-                                            }
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                        </table>
-                    </td>
-                }
-            </tr>
-            <tr></tr>
+            <li>@lesson.FullName</li>
         }
-    </table>
+    </ul>
 </body>
 </html>

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ResponseLessonDataForGroup>
+﻿@model GroupScheduleViewModel
 
 <!DOCTYPE html>
 <html>
@@ -8,8 +8,8 @@
 </head>
 <body>
     @Html.Partial("Header")
-    <h1 align="center">U r looking on the schedule of the @Model.ElementAtOrDefault(0)?.GroupId</h1>
-    @foreach (ResponseLessonDataForGroup lesson in Model)
+    <h1 align="center">U r looking on the schedule of the @Model.Group.FullName</h1>
+    @foreach (ResponseLessonDataForGroup lesson in Model.Lessons)
     {
         <h3>@lesson.FullName</h3>
     }
