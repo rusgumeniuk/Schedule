@@ -3,39 +3,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>GroupSchedule</title>
 </head>
 <body>
     <partial name="Header" />
     <h1 align="center">U r looking on the schedule of the @Model.Group.FullName</h1>
-    <table>
+    <table class="table table-bordered table-sm">
         @for (int weekMode = 1; weekMode <= 2; ++weekMode)
         {
-            <tr style="border:dotted">
+            <tr>
                 @for (int dayOfWeek = 1; dayOfWeek < Model.DaysOfWeeks.Count(); ++dayOfWeek)
                 {
                     <td>
-                        <div>
-                            <strong>
-                                @Model.DaysOfWeeks.First(val => (int)val == dayOfWeek)
-                            </strong>
-                            @for(byte lessonNumber = 1; lessonNumber < Model.LessonNumbers.Count(); ++lessonNumber)
+                        <table class="table table-borderless table-striped">
+                            <tr>
+                                <td>
+                                    <strong>@Model.DaysOfWeeks.First(val => (int)val == dayOfWeek)</strong>
+                                </td>
+                            </tr>
+
+                            @for (byte lessonNumber = 1; lessonNumber < Model.LessonNumbers.Count(); ++lessonNumber)
                             {
-                                <br />
-                                <div>
-                                    <div><i>@Model.LessonNumbers.First(val => (int)val == lessonNumber) lesson</i></div><br />
+                                <tr>
+                                    <td><i>@Model.LessonNumbers.First(val => (int)val == lessonNumber) lesson</i></td>
+                                </tr>
+                                <tr>
                                     @{
                                         var foundLesson = Model.Lessons.FirstOrDefault(lesson => (lesson.LessonWeek == weekMode || lesson.LessonWeek == 0) && lesson.DayNumber == (byte)dayOfWeek && lesson.LessonNumber == (byte)lessonNumber);
                                     }
-                                    @if (foundLesson != null)
-                                    {
-                                        <div><u>@foundLesson.LessonName</u></div>
-                                    }
-
-                                </div>
+                                    <td>
+                                        <u>@foundLesson?.LessonName @String.Empty</u>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @foundLesson?.TeacherName @String.Empty
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @foundLesson?.Rooms.ElementAtOrDefault(0)?.FullName @String.Empty
+                                        <hr />
+                                    </td>
+                                </tr>                                
                             }
-                        </div>
+                        </table>
                     </td>
                 }
             </tr>
