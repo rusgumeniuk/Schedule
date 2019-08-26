@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Schedule.Controllers
@@ -21,7 +22,7 @@ namespace Schedule.Controllers
         public HomeController(DataContext dataContext, IHttpClientFactory _clientFactory)
         {
             db = dataContext;
-            clientFactory = _clientFactory;
+            clientFactory = _clientFactory;            
         }
         public IActionResult Index()
         {
@@ -39,9 +40,9 @@ namespace Schedule.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GroupSchedule(int id)
-        {
-            return View(new GroupScheduleViewModel() { Lessons = await GetScheduleForGroup(id), Group = await GetGroup(id) });
+        public async Task<IActionResult> GroupSchedule(string inputedName)
+        {            
+            return View(new GroupScheduleViewModel() { Lessons = await GetScheduleForGroup(inputedName), Group = await GetGroup(inputedName) });
         }
         [HttpPost]
         public async Task<IActionResult> TeacherSchedule(int id)
@@ -56,15 +57,7 @@ namespace Schedule.Controllers
                 ModelState.AddModelError("Lessons", $"Selected teacher with id #{id} has not lessons");
                 return RedirectToAction("TeacherFind");
             }
-        }
-
-        private void FillViewBag(IEnumerable<Lesson> lessons)
-        {
-            ViewBag.Days = Enum.GetValues(typeof(DayOfWeek)).Cast<DayOfWeek>();
-            ViewBag.Numbers = Enum.GetValues(typeof(LessonNumber)).Cast<LessonNumber>();
-            ViewBag.Lessons = lessons;
-        }
-
+        }      
 
 
         private async Task<ResponseGroupData> GetGroup(int id)
@@ -75,6 +68,14 @@ namespace Schedule.Controllers
             else
                 throw new ArgumentException($"Not found Group with id {id}");
         }
+        private async Task<ResponseGroupData> GetGroup(string name)
+        {
+            var response = await GetResponse($"{baseUrl}groups/{name}");
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ResponseRootSingeData<ResponseGroupData>>(response.Content.ReadAsStringAsync().Result).Data;
+            else
+                throw new ArgumentException($"Not found Group with name {name}");
+        }
         private async Task<ResponseTeacherData> GetTeacher(int id)
         {
             var response = await GetResponse($"{baseUrl}teachers/{id}");
@@ -82,6 +83,23 @@ namespace Schedule.Controllers
                 return JsonConvert.DeserializeObject<ResponseRootSingeData<ResponseTeacherData>>(response.Content.ReadAsStringAsync().Result).Data;
             else
                 throw new ArgumentException($"Not found Teacher with id {id}");
+        }
+
+        private async Task<IEnumerable<ResponseGroupData>> GetGroupsByName(string name)
+        {
+            var response = await GetResponse($"{baseUrl}groups/?search={{'query':'{name}'}}");
+            if (IsFullGroupName(name))
+            {
+                try
+                {
+                    return new ResponseGroupData[] { JsonConvert.DeserializeObject<ResponseRootSingeData<ResponseGroupData>>(response.Content.ReadAsStringAsync().Result).Data };
+                }
+                catch (Exception)
+                {
+                    //
+                }
+            }
+            return JsonConvert.DeserializeObject<ResponseRootMultipleData<ResponseGroupData>>(response.Content.ReadAsStringAsync().Result).Data;
         }
 
         private async Task<IList<ResponseGroupData>> GetAllGroups()
@@ -112,6 +130,15 @@ namespace Schedule.Controllers
             }
             return null;
         }
+        private async Task<IList<ResponseLessonDataForGroup>> GetScheduleForGroup(string name)
+        {
+            var response = await GetResponse($"{baseUrl}groups/{name}/lessons");
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ResponseRootMultipleData<ResponseLessonDataForGroup>>(response.Content.ReadAsStringAsync().Result).Data.OrderBy(lesson => lesson.DayNumber).ThenBy(lesson => lesson.LessonNumber).ToArray();
+            }
+            return null;
+        }
         private async Task<IList<ResponseLessonDataForTeacher>> GetScheduleForTeacher(int teacherId)
         {
             var response = await GetResponse($"{baseUrl}teachers/{teacherId}/lessons");
@@ -133,6 +160,11 @@ namespace Schedule.Controllers
             {
                 return await client.SendAsync(request);
             }
+        }
+
+        private bool IsFullGroupName(string groupName)
+        {                        
+            return new Regex(@"^\w{2}-[1-9]{2}", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline).IsMatch(groupName);
         }
     }
 }
