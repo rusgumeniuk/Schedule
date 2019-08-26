@@ -3,16 +3,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+
     <title>Group find</title>
 </head>
 <body>
     <partial name="Header" />
     <h3 style="text-align:center">Please select group</h3>
     <form asp-controller="Home" asp-action="GroupSchedule" method="post" style="text-align:center">
-        <input type="text" list="groupList" placeholder="Select group" oninput="say()" onchange="sayChange()" id="inputedName" name="inputedName" />
+        <input type="text" list="groupList" placeholder="Select group" oninput="GetGroups(this.value)" onchange="sayChange()" id="inputedName" name="inputedName" />
         <input type="submit" value="Show schedule" />
-        <datalist id="groupList" />
+        <datalist id="groupList"  />
     </form>
 </body>
 </html>
@@ -25,7 +29,30 @@
         function sayChange() {
             alert("CHANGED");
         }
+
+        function GetGroups(name) {
+            $.ajax({
+                url: "https://api.rozklad.org.ua/v2/groups/?search={'query':" +
+                    name
+                    + "'}",
+                type: 'GET',
+                contentType: "application/json",
+                success: function (root) {                    
+                    var list = document.getElementById("groupList");
+                    $.each(root.data, function (index, user) {                        
+                        var option = document.createElement('option');
+                            option.value = user.group_full_Name;
+                            list.appendChild(option);
+                    })                    
+                 }
+            });
+        }
+        GetGroups("іп")
+        sayChange();
         function UpdateDataList() {
+            @String.Empty
+
+
             var request = new XMLHttpRequest();
             request.
                 open('GET',
@@ -52,7 +79,6 @@
             request.send();            
             
         }
-
     </script>
 
 }
