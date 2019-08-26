@@ -2,7 +2,7 @@
 
 namespace Schedule.Models.JsonHelpers
 {
-    public class ResponseRoot<T>
+    abstract public class ResponseRoot<T>
         where T : IResponseData
     {
         [JsonProperty("statusCode")]
@@ -18,9 +18,6 @@ namespace Schedule.Models.JsonHelpers
         public object DebugInfo { get; set; }
 
         [JsonProperty("meta")]
-        public ResponseMeta Meta { get; set; }
-
-        [JsonProperty("data")]
-        public T[] Data { get; set; }
+        public ResponseMeta Meta { get; set; }        
     }
 }
