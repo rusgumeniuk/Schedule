@@ -4,10 +4,10 @@ namespace Schedule.Models.Enums
 {
     public enum WeekMode : byte
     {
-        Both,
+        Both = 0,
         [Display(Name = "I тиждень")]
-        First,
+        First = 1,
         [Display(Name = "II тиждень")]
-        Second,
+        Second = 2,
     }
 }
