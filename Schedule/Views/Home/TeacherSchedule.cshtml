@@ -3,17 +3,67 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>TeacherSchedule</title>
 </head>
 <body>
-    @Html.Partial("Header")
+    <partial name="Header"/>
     <h1 align="center">U r looking on the schedule for teacher @Model.Teacher.FullName</h1>
-    <ul>
-        @foreach (var lesson in Model.Lessons)
+    <table class="table table-bordered table-sm">
+        @for (int weekMode = 1; weekMode <= 2; ++weekMode)
         {
-            <li>@lesson.FullName</li>
+            <tr>
+                @for (int dayOfWeek = 1; dayOfWeek < Model.DaysOfWeeks.Count(); ++dayOfWeek)
+                {
+                    <td>
+                        <table class="table table-borderless table-striped">
+                            <tr>
+                                <td>
+                                    <strong>@Model.DaysOfWeeks.First(val => (int)val == dayOfWeek)</strong>
+                                </td>
+                            </tr>
+
+                            @for (byte lessonNumber = 1; lessonNumber < Model.LessonNumbers.Count(); ++lessonNumber)
+                            {
+                                <tr>
+                                    <td><i>@Model.LessonNumbers.First(val => (int)val == lessonNumber) lesson</i></td>
+                                </tr>
+                                <tr>
+                                    @{
+                                        var foundLesson = Model.Lessons.FirstOrDefault(lesson => (lesson.LessonWeek == weekMode || lesson.LessonWeek == 0) && lesson.DayNumber == (byte)dayOfWeek && lesson.LessonNumber == (byte)lessonNumber);
+                                    }
+                                    <td>
+                                        <u>@foundLesson?.LessonName @String.Empty</u>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @if (foundLesson?.Groups != null)
+                                        {
+                                            string groups = String.Empty;
+                                            foreach (var item in foundLesson?.Groups)
+                                            {
+                                                groups += item.FullName.ToUpperInvariant() + ", ";
+                                            }
+                                            @groups.Remove(groups.Length - 2);
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @foundLesson?.Rooms.ElementAtOrDefault(0)?.FullName @String.Empty
+                                        <hr />
+                                    </td>
+                                </tr>
+
+                            }
+                        </table>
+                    </td>
+                }
+            </tr>
+
         }
-    </ul>
+    </table>
 </body>
 </html>
