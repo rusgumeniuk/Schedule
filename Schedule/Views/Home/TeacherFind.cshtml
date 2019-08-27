@@ -3,22 +3,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
     <title>TeacherFind</title>
 </head>
 <body>
-    @Html.Partial("Header")
+    <partial name="Header"/>
     <h3 style="text-align:center">Select a teacher</h3>
     <div class="validation" asp-validation-summary="ModelOnly"></div>
     <form asp-controller="Home" asp-action="TeacherSchedule" method="post" style="text-align:center">
         <span asp-validation-for="Teachers" />
-        <select name="id" id="SelectedTeacher">
-            @foreach (ResponseTeacherData teacher in Model.Teachers)
-            {
-                <option value=@teacher.Id>@teacher.FullName</option>
-            }
-        </select>
-        <input type="submit" value="Show schedule" />
+        <input type="text" list="teacherList" placeholder="Select teacher" oninput="getEntitiesByPartName(this.value, 'teacher')" id="inputedName" name="inputedName" autocomplete="off" />
+        <input type="submit" value="Show schedule" />        
+        <datalist id="teacherList" />
     </form>
 </body>
 </html>
+<script type="text/javascript">
+    function getEntitiesByPartName(name, entityName) {
+        $.ajax({
+            url: "https://api.rozklad.org.ua/v2/" + entityName + "s/?search={'query':'"+name.toString().trim()+"'}",
+            type: 'GET',
+            contentType: "application/json",
+            success: function (root) {                
+                var list = $("#" + entityName + "List");
+                list.empty();                
+                $.each(root.data, function (index, entity) {
+                    var option = document.createElement('option');
+                    if (entityName == "group")
+                        option.value = entity.group_full_name.toUpperCase();
+                    else if (entityName == "teacher")
+                        option.value = entity.teacher_name;
+                    list.append(option);
+                })
+            }
+        });
+    }
+</script>
