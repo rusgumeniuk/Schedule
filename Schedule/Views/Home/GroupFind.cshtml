@@ -11,14 +11,36 @@
 </head>
 <body>
     <partial name="Header" />
-    <h3 style="text-align:center">Please select group</h3>
-    <form asp-controller="Home" asp-action="GroupSchedule" method="post" style="text-align:center">
-        <input type="text" list="groupList" placeholder="Select group" oninput="getEntitiesByPartName(this.value,'group')" id="inputedName" name="inputedName" autocomplete="off" />
-        <input type="submit" value="Show schedule" />
-        <datalist id="groupList" />
-    </form>
+    <div class="container">
+        <div class="row justify-content-center">
+            <h3 style="text-align:center">Select a group</h3>
+        </div>
+        <div class="row justify-content-center">
+            <div class="container">
+                <form asp-controller="Home" asp-action="GroupFind" method="post" style="text-align:center">
+                    <div class="row justify-content-center">
+                        <input type="text"
+                               id="inputedName"
+                               name="inputedName"
+                               list="groupList"
+                               asp-for="SelectedGroup"
+                               placeholder="Select group"
+                               oninput="getEntitiesByPartName(this.value, 'group')"
+                               autocomplete="off"
+                               style="margin-right:10px; width:30%; text-align:center"
+                               required
+                               min="5"/>
+                        <input type="submit" value="Show schedule" style="margin-left:10px" />
+                    </div>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="SelectedGroup"></span>
+                    </div>
+                    <datalist id="groupList" />
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
-
 </html>
 <script type="text/javascript">
     function getEntitiesByPartName(name, entityName) {
@@ -28,15 +50,16 @@
             contentType: "application/json",
             success: function (root) {
                 var list = $("#" + entityName + "List");
-                list.empty();                
-                $.each(root.data, function (index, entity) {
-                    var option = document.createElement('option');
-                    if (entityName == "group")
-                        option.value = entity.group_full_name.toUpperCase();
-                    else if (entityName == "teacher")
-                        option.value = entity.teacher_full_name;
-                    list.append(option);
-                })
+                list.empty();
+                if (entityName.length > 1 && entityName.length < 8)
+                    $.each(root.data, function (index, entity) {
+                        var option = document.createElement('option');
+                        if (entityName == "group")
+                            option.value = entity.group_full_name.toUpperCase();
+                        else if (entityName == "teacher")
+                            option.value = entity.teacher_full_name;
+                        list.append(option);
+                    })
             }
         });
     }

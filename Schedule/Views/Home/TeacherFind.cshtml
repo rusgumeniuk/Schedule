@@ -9,26 +9,47 @@
     <title>TeacherFind</title>
 </head>
 <body>
-    <partial name="Header"/>
-    <h3 style="text-align:center">Select a teacher</h3>
+    <partial name="Header" />
     <div class="validation" asp-validation-summary="ModelOnly"></div>
-    <form asp-controller="Home" asp-action="TeacherSchedule" method="post" style="text-align:center">
-        <span asp-validation-for="Teachers" />
-        <input type="text" list="teacherList" placeholder="Select teacher" oninput="getEntitiesByPartName(this.value, 'teacher')" id="inputedName" name="inputedName" autocomplete="off" />
-        <input type="submit" value="Show schedule" />        
-        <datalist id="teacherList" />
-    </form>
+    <div class="container">
+        <div class="row justify-content-center">
+            <h3 style="text-align:center">Select a teacher</h3>
+        </div>
+        <div class="row justify-content-center">
+            <div class="container">
+                <form asp-controller="Home" asp-action="TeacherFind" method="post" style="text-align:center">
+                    <div class="row justify-content-center">
+                        <input type="text"
+                               id="inputedName"
+                               name="inputedName"
+                               list="teacherList"
+                               asp-for="SelectedTeacher"
+                               placeholder="Select teacher"
+                               oninput="getEntitiesByPartName(this.value, 'teacher')"
+                               autocomplete="off"
+                               style="margin-right:10px; width:30%; text-align:center"
+                               required min="7"/>
+                        <input type="submit" value="Show schedule" style="margin-left:10px" />
+                    </div>
+                    <div class="row justify-content-center">
+                        <span asp-validation-for="SelectedTeacher"></span>
+                    </div>
+                    <datalist id="teacherList" />
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
 <script type="text/javascript">
     function getEntitiesByPartName(name, entityName) {
         $.ajax({
-            url: "https://api.rozklad.org.ua/v2/" + entityName + "s/?search={'query':'"+name.toString().trim()+"'}",
+            url: "https://api.rozklad.org.ua/v2/" + entityName + "s/?search={'query':'" + name.toString().trim() + "'}",
             type: 'GET',
             contentType: "application/json",
-            success: function (root) {                
+            success: function (root) {
                 var list = $("#" + entityName + "List");
-                list.empty();                
+                list.empty();
                 $.each(root.data, function (index, entity) {
                     var option = document.createElement('option');
                     if (entityName == "group")
