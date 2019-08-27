@@ -45,16 +45,16 @@ namespace Schedule.Controllers
             return View(new GroupScheduleViewModel() { Lessons = await GetScheduleForGroup(inputedName), Group = await GetGroup(inputedName) });
         }
         [HttpPost]
-        public async Task<IActionResult> TeacherSchedule(int id)
+        public async Task<IActionResult> TeacherSchedule(string inputedName)
         {
             try
             {
-                var res = await GetScheduleForTeacher(id);
-                return View(new TeacherScheduleViewModel() { Lessons = res, Teacher = await GetTeacher(id) });
+                var res = await GetScheduleForTeacher(inputedName);
+                return View(new TeacherScheduleViewModel() { Lessons = res, Teacher = await GetTeacher(inputedName) });
             }
             catch (ArgumentException)
             {
-                ModelState.AddModelError("Lessons", $"Selected teacher with id #{id} has not lessons");
+                ModelState.AddModelError("Lessons", $"Selected teacher with name #{inputedName} has not lessons");
                 return RedirectToAction("TeacherFind");
             }
         }      
@@ -83,6 +83,14 @@ namespace Schedule.Controllers
                 return JsonConvert.DeserializeObject<ResponseRootSingeData<ResponseTeacherData>>(response.Content.ReadAsStringAsync().Result).Data;
             else
                 throw new ArgumentException($"Not found Teacher with id {id}");
+        }
+        private async Task<ResponseTeacherData> GetTeacher(string name)
+        {
+            var response = await GetResponse($"{baseUrl}teachers/{name}");
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ResponseRootSingeData<ResponseTeacherData>>(response.Content.ReadAsStringAsync().Result).Data;
+            else
+                throw new ArgumentException($"Not found Teacher with id {name}");
         }
 
         private async Task<IEnumerable<ResponseGroupData>> GetGroupsByName(string name)
@@ -148,6 +156,16 @@ namespace Schedule.Controllers
             }
             else
                 throw new ArgumentException($"Teacher {teacherId} has not lessons");
+        }
+        private async Task<IList<ResponseLessonDataForTeacher>> GetScheduleForTeacher(string name)
+        {
+            var response = await GetResponse($"{baseUrl}teachers/{name}/lessons");
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ResponseRootMultipleData<ResponseLessonDataForTeacher>>(response.Content.ReadAsStringAsync().Result).Data.OrderBy(lesson => lesson.DayNumber).ThenBy(lesson => lesson.LessonNumber).ToArray();
+            }
+            else
+                throw new ArgumentException($"Teacher {name} has not lessons");
         }
 
         private async Task<HttpResponseMessage> GetResponse(string requestUrl)
