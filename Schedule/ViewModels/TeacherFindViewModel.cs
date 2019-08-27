@@ -1,10 +1,10 @@
-﻿using Schedule.Models.JsonHelpers;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Schedule.ViewModels
 {
     public class TeacherFindViewModel
     {
-        public IEnumerable<ResponseTeacherData> Teachers { get; set; }
+        [Required(ErrorMessage = "Будь ласка виберіть викладача зі списку або введіть повне ПІБ")]
+        public string SelectedTeacher { get; set; }
     }
 }

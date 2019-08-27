@@ -1,10 +1,11 @@
-﻿using Schedule.Models.JsonHelpers;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Schedule.ViewModels
 {
     public class GroupFindViewModel
     {
-        public IEnumerable<ResponseGroupData> Groups { get; set; }
+        [Required(ErrorMessage = "Невірна назва групи!\r\nБудь ласка виберіть групу зі списку або введіть повну назву.")]
+        [StringLength(8, MinimumLength = 4, ErrorMessage = "Введене має недопустиму довжину")]
+        public string SelectedGroup { get; set; }
     }
 }
