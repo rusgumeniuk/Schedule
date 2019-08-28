@@ -1,0 +1,17 @@
+﻿@{    
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<html>
+<body>
+    <header>
+        @{await Html.RenderPartialAsync("_ScheduleHeader");}
+    </header>
+    <div class="container">
+        @RenderBody()
+    </div>
+</body>
+</html>
+
+
+

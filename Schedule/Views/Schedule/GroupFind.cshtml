@@ -1,5 +1,8 @@
 ﻿@model GroupFindViewModel
-
+@{
+    ViewData["Title"] = "Find group";
+    Layout = "~/Views/Schedule/_ScheduleLayout.cshtml";
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,15 +12,14 @@
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
     <title>Group find</title>
 </head>
-<body>
-    <partial name="Header" />
+<body>    
     <div class="container">
         <div class="row justify-content-center">
             <h3 style="text-align:center">Select a group</h3>
         </div>
         <div class="row justify-content-center">
             <div class="container">
-                <form asp-controller="Home" asp-action="GroupFind" method="post" style="text-align:center">
+                <form asp-controller="Schedule" asp-action="GroupFind" method="post" style="text-align:center">
                     <div class="row justify-content-center">
                         <input type="text"
                                id="inputedName"
@@ -29,7 +31,7 @@
                                autocomplete="off"
                                style="margin-right:10px; width:30%; text-align:center"
                                required
-                               min="5"/>
+                               min="5" />
                         <input type="submit" value="Show schedule" style="margin-left:10px" />
                     </div>
                     <div class="row justify-content-center">
@@ -64,4 +66,3 @@
         });
     }
 </script>
-}

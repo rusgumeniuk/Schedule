@@ -1,5 +1,8 @@
 ﻿@model TeacherScheduleViewModel
-
+@{
+    ViewData["Title"] = "Teacher schedule";
+    Layout = "~/Views/Schedule/_ScheduleLayout.cshtml";
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,8 +10,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>TeacherSchedule</title>
 </head>
-<body>
-    <partial name="Header"/>
+<body>    
     <h1 align="center">U r looking on the schedule for teacher @Model.Teacher.FullName</h1>
     <table class="table table-bordered table-sm">
         @for (int weekMode = 1; weekMode <= 2; ++weekMode)

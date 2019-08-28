@@ -1,5 +1,8 @@
 ﻿@model GroupScheduleViewModel
-
+@{
+    ViewData["Title"] = "Group schedule";
+    Layout = "~/Views/Schedule/_ScheduleLayout.cshtml";
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,8 +10,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>GroupSchedule</title>
 </head>
-<body>
-    <partial name="Header" />
+<body>    
     <h1 align="center">U r looking on the schedule of the @Model.Group.FullName</h1>
     <table class="table table-bordered table-sm">
         @for (int weekMode = 1; weekMode <= 2; ++weekMode)
@@ -47,7 +49,8 @@
                                         @foundLesson?.Rooms.ElementAtOrDefault(0)?.FullName @String.Empty
                                         <hr />
                                     </td>
-                                </tr>                                
+                                </tr>
+
                             }
                         </table>
                     </td>
