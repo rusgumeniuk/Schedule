@@ -1,0 +1,13 @@
+﻿@model User
+@{
+    ViewData["Title"] = "MyAccount";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>MyAccount</h1>
+
+<form method="get" asp-controller="Account" asp-action="ChangePassword">
+    <input type="hidden" asp-for="@Model.Id" />
+    <input type="submit" value="Change password"  />
+</form>
+
