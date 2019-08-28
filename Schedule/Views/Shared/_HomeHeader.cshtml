@@ -1,14 +1,33 @@
 ﻿<div class="container">
     <div class="row">
-        <a asp-controller="Home" asp-action="Index">Campusom</a>
+        <div class="col-3">
+            <a asp-controller="Home" asp-action="Index">Campusom</a>
+        </div>
+        <div class="col">
+            <div class="container">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <p>@User.Identity.Name</p>
+
+                    <form method="post" asp-controller="Account" asp-action="LogOff">
+                        <input type="submit" value="Log out" />
+                    </form>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login">Login</a>
+                    <a asp-controller="Account" asp-action="Register">Register</a>
+                }
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col">
             <a asp-controller="Schedule" asp-action="Index">Schedule</a>
         </div>
         @*<div class="col">
-            <a asp-controller="GroupChat" asp-action="Index">Group chat</a>
-        </div>*@
+                <a asp-controller="GroupChat" asp-action="Index">Group chat</a>
+            </div>*@
         <div class="col">
             <a asp-controller="StudyingProcess" asp-action="Index">Studying process</a>
         </div>
