@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Schedule.Models;
 
 namespace Schedule
@@ -21,7 +21,14 @@ namespace Schedule
         public void ConfigureServices(IServiceCollection services)
         {
             string connection = Configuration.GetConnectionString("ScheduleDB");
-            services.AddDbContext<DataContext>(options => options.UseSqlServer(connection));        
+            services.AddDbContext<DataContext>(options =>
+                options.UseSqlServer(connection));
+
+            services.AddDbContext<IdentityContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<IdentityContext>();
 
             services.AddMvc();
             services.AddHttpClient();
@@ -33,6 +40,15 @@ namespace Schedule
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
