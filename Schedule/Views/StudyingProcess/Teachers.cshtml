@@ -1,0 +1,29 @@
+﻿@model IEnumerable<ResponseTeacherData>
+@{
+    ViewData["Title"] = "Teachers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Teachers</h1>
+
+<div class="container">
+    @foreach (var teacher in Model)
+    {
+        <div class="row">
+            <div class="col">
+                @teacher.FullName
+            </div>
+            <div class="col">
+                @teacher.TeacherRating
+            </div>
+            <div class="col">
+                <form asp-action="Teacher">
+                    <input type="hidden" value="@teacher.TeacherName" name="teacherName"/>
+                    <button class="btn btn-warning">
+                        Rate teacher or leave a feedback
+                    </button>
+                </form>
+            </div>
+        </div>
+    }
+</div>
