@@ -42,6 +42,11 @@ namespace Schedule.Models.JsonHelpers
             else
                 throw new ArgumentException($"Not found Teacher with id {id}");
         }
+        public async Task<ResponseLessonData> GetLesson(string groupName, long lessonId)
+        {
+            var lessons = await GetScheduleForGroup(groupName);            
+            return lessons?.FirstOrDefault(lesson => lesson.Id.Equals(lessonId));            
+        }
 
         public async Task<ResponseLessonData> GetLesson(string groupName, string lessonName)
         {
