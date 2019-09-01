@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Schedule.Models;
 using Schedule.Models.JsonHelpers;
 using Schedule.ViewModels.StudyingProcess;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -37,10 +38,10 @@ namespace Schedule.Controllers
             return View(await responseFactory.GetScheduleForGroup(user.GroupName));
         }
 
-        public async Task<IActionResult> Lesson(string lessonName)
+        public async Task<IActionResult> Lesson(long lessonId)
         {
             var user = await GetCurrentUser();
-            var lesson = await responseFactory.GetLesson(user.GroupName, lessonName);
+            var lesson = await responseFactory.GetLesson(user.GroupName, lessonId);
             IList<LessonFeedback> list = new List<LessonFeedback>
             {
                 new LessonFeedback() { Description = "Pretty good lesson", Lesson = lesson, User = user, Rate = Models.Enums.Rate.Normal },
