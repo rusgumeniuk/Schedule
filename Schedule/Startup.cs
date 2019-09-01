@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Schedule.Models;
+using Schedule.Models.JsonHelpers;
 
 namespace Schedule
 {
@@ -30,7 +31,7 @@ namespace Schedule
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
-
+            services.AddScoped<ResponseFactory, ResponseFactory>();
             services.AddMvc();
             services.AddHttpClient();
         }
