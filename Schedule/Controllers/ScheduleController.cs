@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Schedule.Models;
 using Schedule.Models.JsonHelpers;
-using Schedule.ViewModels;
+using Schedule.ViewModels.Schedule;
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -10,12 +9,10 @@ namespace Schedule.Controllers
 {
     public class ScheduleController : Controller
     {
-        private readonly DataContext db;
         private readonly ResponseFactory responseFactory;
 
-        public ScheduleController(DataContext dataContext, ResponseFactory _responseFactory)
+        public ScheduleController(ResponseFactory _responseFactory)
         {
-            db = dataContext;
             responseFactory = _responseFactory;
         }
         public IActionResult Index()

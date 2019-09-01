@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Schedule.ViewModels
+namespace Schedule.ViewModels.Account
 {
     public class RegisterViewModel
     {

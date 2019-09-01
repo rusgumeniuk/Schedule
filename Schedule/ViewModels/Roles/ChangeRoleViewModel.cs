@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
-namespace Schedule.ViewModels
+namespace Schedule.ViewModels.Roles
 {
     public class ChangeRoleViewModel
     {

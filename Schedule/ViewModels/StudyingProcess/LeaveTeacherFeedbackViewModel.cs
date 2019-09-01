@@ -1,11 +1,9 @@
-﻿using Schedule.Models;
-using Schedule.Models.Enums;
-using Schedule.Models.JsonHelpers;
+﻿using Schedule.Models.Enums;
 
-namespace Schedule.ViewModels
+namespace Schedule.ViewModels.StudyingProcess
 {
     public class LeaveTeacherFeedbackViewModel
-    {        
+    {
         public string TeacherName { get; set; }
         public Rate Rate { get; set; }
         public string Feedback { get; set; }

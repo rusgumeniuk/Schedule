@@ -1,4 +1,4 @@
-﻿namespace Schedule.ViewModels
+﻿namespace Schedule.ViewModels.Users
 {
     public class EditUserViewModel
     {

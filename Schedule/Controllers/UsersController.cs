@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Schedule.Models;
-using Schedule.ViewModels;
+using Schedule.ViewModels.Users;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,7 +11,7 @@ namespace Schedule.Controllers
     [Authorize(Roles = "admin")]
     public class UsersController : Controller
     {
-        UserManager<User> _userManager;
+        readonly UserManager<User> _userManager;
 
         public UsersController(UserManager<User> userManager)
         {

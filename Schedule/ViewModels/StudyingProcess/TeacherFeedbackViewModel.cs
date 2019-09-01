@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Schedule.ViewModels
+namespace Schedule.ViewModels.StudyingProcess
 {
     public class TeacherFeedbackViewModel
     {

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Schedule.Models;
 using Schedule.Models.JsonHelpers;
-using Schedule.ViewModels;
+using Schedule.ViewModels.StudyingProcess;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -36,9 +36,11 @@ namespace Schedule.Controllers
         {
             var user = await GetCurrentUser();
             var teacher = await responseFactory.GetTeacher(teacherName);
-            IList<TeacherFeedback> list = new List<TeacherFeedback>();
-            list.Add(new TeacherFeedback() { Description = "Pretty good teacher", Teacher = teacher, User = user, Rate = Models.Enums.Rate.Normal });
-            list.Add(new TeacherFeedback() { Description = "So cool teacher. Like him", Teacher = teacher, User = user, Rate = Models.Enums.Rate.VeryWell });
+            IList<TeacherFeedback> list = new List<TeacherFeedback>
+            {
+                new TeacherFeedback() { Description = "Pretty good teacher", Teacher = teacher, User = user, Rate = Models.Enums.Rate.Normal },
+                new TeacherFeedback() { Description = "So cool teacher. Like him", Teacher = teacher, User = user, Rate = Models.Enums.Rate.VeryWell }
+            };
             return View(new TeacherFeedbackViewModel() { CurrentUser = user, Teacher = teacher, TeacherFeedbacks = list });
         }
 

@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Folder Include="Diagrams\" />
+    <Folder Include="ViewModels\Home\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

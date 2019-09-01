@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Schedule.ViewModels
+namespace Schedule.ViewModels.Schedule
 {
     public class TeacherFindViewModel
     {

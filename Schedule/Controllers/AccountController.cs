@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Schedule.Models;
-using Schedule.ViewModels;
+using Schedule.ViewModels.Account;
 using System.Threading.Tasks;
 
 namespace Schedule.Controllers
@@ -36,7 +36,7 @@ namespace Schedule.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Email = model.Email, UserName = model.Email};                
+                User user = new User { Email = model.Email, UserName = model.Email };
                 var result = await userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -96,7 +96,7 @@ namespace Schedule.Controllers
             {
                 var user = await userManager.FindByNameAsync(model.Email);
                 if (user != null)
-                {                    
+                {
                     if (!await userManager.IsEmailConfirmedAsync(user))
                     {
                         ModelState.AddModelError(string.Empty, "To log in please confirm your email");
@@ -107,7 +107,7 @@ namespace Schedule.Controllers
                 var result =
                     await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
-                {                    
+                {
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                     {
                         return Redirect(model.ReturnUrl);
@@ -128,12 +128,12 @@ namespace Schedule.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogOff()
-        {            
+        {
             await signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpGet]        
+        [HttpGet]
         public async Task<IActionResult> ChangePassword(string id)
         {
             User user = await userManager.FindByIdAsync(id);
@@ -187,7 +187,7 @@ namespace Schedule.Controllers
         {
             return View();
         }
-        
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -196,7 +196,7 @@ namespace Schedule.Controllers
             if (ModelState.IsValid)
             {
                 var user = await userManager.FindByEmailAsync(model.Email);
-                if(user == null || !(await userManager.IsEmailConfirmedAsync(user)))
+                if (user == null || !(await userManager.IsEmailConfirmedAsync(user)))
                 {
                     return View("ForgotPasswordConfirmation");
                 }
@@ -204,7 +204,7 @@ namespace Schedule.Controllers
                 var callBackUrl = Url.Action(
                     "ResetPassword",
                     "Account",
-                    new { userId = user.Id, code = code },
+                    new { userId = user.Id, code },
                     protocol: HttpContext.Request.Scheme);
                 EmailService emailService = new EmailService();
                 await emailService.SendEmailAsync(model.Email, "Reset password",
@@ -232,7 +232,7 @@ namespace Schedule.Controllers
                 return View(model);
             }
             var user = await userManager.FindByEmailAsync(model.Email);
-            if(user == null)
+            if (user == null)
             {
                 return View("ResetPasswordConfirmation");
             }
