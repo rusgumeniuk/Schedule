@@ -1,0 +1,83 @@
+﻿@model LessonFeedbackViewModel
+@{
+    ViewData["Title"] = "Lesson";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" style="width:100%">
+    <div class="row">
+        <div class="col">
+            <form asp-action="LeaveLessonFeedback">
+                <div class="container">
+                    <input type="hidden" asp-for="Lesson.FullName" name="LessonName" />
+                    <div class="row">
+                        Rate @Model.Lesson.LessonName please
+                    </div>
+                    <div class="row">
+                        <div class="container">
+                            @foreach (var rate in Model.Rates)
+                            {
+                                <div class="row">
+                                    <input type="radio" value="@rate" name="Rate" /> @rate
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        Leave a some feelings etc
+                    </div>
+                    <div class="row">
+                        <input type="text" name="Feedback" />
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p>Maybe u wanna leave it like anonymus?</p>
+                        </div>
+                        <div class="col-3">
+                            <input type="checkbox" name="IsAnonymus" value="true" />
+                        </div>
+                    </div>
+                    <button type="submit">Submit</button>
+                </div>
+
+            </form>
+        </div>
+        <div class="col">
+            <div class="container">
+                @foreach (var feedback in Model.LessonFeedbacks)
+                {
+                    <hr>
+                    <div class="row">
+                        <div class="container">
+                            <div class="row bordered">
+                                <div class="col">
+                                    @{
+                                        string username = feedback.User?.UserName ?? "Incognito";
+                                    }
+                                    <i>@username about</i>
+                                </div>
+                                <div class="col">
+                                    <i>@feedback.Lesson.LessonName</i>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <p>"@feedback.Description"</p>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    Rate:
+                                </div>
+                                <div class="col">
+                                    <div><i>@feedback.Rate</i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

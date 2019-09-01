@@ -31,6 +31,23 @@ namespace Schedule.Controllers
             User user = await userManager.GetUserAsync(HttpContext.User);
             return View(await responseFactory.GetGroupTeachers(user.GroupName));
         }
+        public async Task<IActionResult> Lessons()
+        {
+            User user = await userManager.GetUserAsync(HttpContext.User);
+            return View(await responseFactory.GetScheduleForGroup(user.GroupName));
+        }
+
+        public async Task<IActionResult> Lesson(string lessonName)
+        {
+            var user = await GetCurrentUser();
+            var lesson = await responseFactory.GetLesson(user.GroupName, lessonName);
+            IList<LessonFeedback> list = new List<LessonFeedback>
+            {
+                new LessonFeedback() { Description = "Pretty good lesson", Lesson = lesson, User = user, Rate = Models.Enums.Rate.Normal },
+                new LessonFeedback() { Description = "So cool lesson. Like him", Lesson = lesson, User = user, Rate = Models.Enums.Rate.VeryWell }
+            };
+            return View(new LessonFeedbackViewModel() { CurrentUser = user, Lesson = lesson, LessonFeedbacks = list });
+        }
 
         public async Task<IActionResult> Teacher(string teacherName)
         {
@@ -54,6 +71,18 @@ namespace Schedule.Controllers
                 Description = model.Feedback
             };
             return RedirectToAction("Teacher", new { teacherName = model.TeacherName });
+        }
+        public async Task<IActionResult> LeaveLessonFeedback(LeaveLessonFeedbackViewModel model)
+        {
+            var user = await GetCurrentUser();
+            LessonFeedback feedback = new LessonFeedback()
+            {
+                Lesson = await responseFactory.GetLesson(user.GroupName, model.LessonName),
+                User = model.IsAnonymus ? null : user,
+                Rate = model.Rate,
+                Description = model.Feedback
+            };
+            return RedirectToAction("Lesson", new { lessonName = model.LessonName });
         }
 
         private async Task<User> GetCurrentUser()
