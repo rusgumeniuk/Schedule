@@ -1,6 +1,6 @@
 ﻿@model GroupScheduleViewModel
 @{
-    ViewData["Title"] = "Group schedule";
+    ViewData["Title"] = $"{Model.Group.FullName} schedule";
     Layout = "~/Views/Schedule/_ScheduleLayout.cshtml";
 }
 <!DOCTYPE html>
@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>GroupSchedule</title>
 </head>
-<body>    
-    <h1 align="center">U r looking on the schedule of the @Model.Group.FullName</h1>
+<body>
+    <h1 align="center"> @Model.Group.FullName schedule</h1>
     <table class="table table-bordered table-sm">
         @for (int weekMode = 1; weekMode <= 2; ++weekMode)
         {
@@ -21,7 +21,7 @@
                     <td>
                         <table class="table table-borderless table-striped">
                             <tr>
-                                <td>
+                                <td align="center">
                                     <strong>@Model.DaysOfWeeks.First(val => (int)val == dayOfWeek)</strong>
                                 </td>
                             </tr>
@@ -29,24 +29,31 @@
                             @for (byte lessonNumber = 1; lessonNumber < Model.LessonNumbers.Count(); ++lessonNumber)
                             {
                                 <tr>
-                                    <td><i>@Model.LessonNumbers.First(val => (int)val == lessonNumber) lesson</i></td>
+                                    <td align="center"><i>@Model.LessonNumbers.First(val => (int)val == lessonNumber) lesson</i></td>
                                 </tr>
                                 <tr>
                                     @{
                                         var foundLesson = Model.Lessons.FirstOrDefault(lesson => (lesson.LessonWeek == weekMode || lesson.LessonWeek == 0) && lesson.DayNumber == (byte)dayOfWeek && lesson.LessonNumber == (byte)lessonNumber);
                                     }
-                                    <td>
-                                        <u>@foundLesson?.LessonName @String.Empty</u>
-                                    </td>
+                                    @if (foundLesson != null)
+                                    {
+                                        <td>
+                                            @Html.ActionLink(foundLesson.LessonName, "Lesson", "StudyingProcess", new { lessonId = foundLesson.Id })
+                                        </td>
+                                        <td align="right">
+                                            <div>@Html.CheckBox($"Favourite{lessonNumber}", @Model.FavouriteLessons?.Contains(foundLesson) ?? false)</div>
+
+                                        </td>
+                                    }
                                 </tr>
                                 <tr>
                                     <td>
-                                        @foundLesson?.TeacherName @String.Empty
+                                        @Html.ActionLink(foundLesson?.TeacherName ?? String.Empty, "Teacher", "StudyingProcess", new { teacherName = foundLesson?.TeacherName })
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        @foundLesson?.Rooms.ElementAtOrDefault(0)?.FullName @String.Empty
+                                    <td align="right">
+                                        @foundLesson?.Rooms.ElementAtOrDefault(0)?.FullName
                                         <hr />
                                     </td>
                                 </tr>
