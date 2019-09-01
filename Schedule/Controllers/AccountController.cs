@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Schedule.Models;
 using Schedule.ViewModels.Account;
 using System.Threading.Tasks;
@@ -9,11 +10,13 @@ namespace Schedule.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly ILogger<AccountController> logger;
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
 
-        public AccountController(UserManager<User> _userManager, SignInManager<User> _signInManager)
+        public AccountController(ILogger<AccountController> _logger, UserManager<User> _userManager, SignInManager<User> _signInManager)
         {
+            logger = _logger;
             userManager = _userManager;
             signInManager = _signInManager;
         }
@@ -114,6 +117,7 @@ namespace Schedule.Controllers
                     }
                     else
                     {
+                        logger.LogInformation($"Logged in: {model.Email}");
                         return RedirectToAction("Index", "Home");
                     }
                 }
@@ -129,6 +133,7 @@ namespace Schedule.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogOff()
         {
+            logger.LogInformation($"Logged off: {HttpContext.User.Identity.Name}");
             await signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
@@ -158,6 +163,7 @@ namespace Schedule.Controllers
                         await userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
                     if (result.Succeeded)
                     {
+                        logger.LogWarning($"Changed password: {model.Email}");
                         return RedirectToAction("MyAccount", "Account");
                     }
                     else
@@ -184,7 +190,7 @@ namespace Schedule.Controllers
         [HttpGet]
         [AllowAnonymous]
         public IActionResult ForgotPassword()
-        {
+        {            
             return View();
         }
 
@@ -198,6 +204,7 @@ namespace Schedule.Controllers
                 var user = await userManager.FindByEmailAsync(model.Email);
                 if (user == null || !(await userManager.IsEmailConfirmedAsync(user)))
                 {
+                    logger.LogError($"Forgot password and wrong creditals: {model.Email}");
                     return View("ForgotPasswordConfirmation");
                 }
                 var code = await userManager.GeneratePasswordResetTokenAsync(user);
@@ -234,11 +241,13 @@ namespace Schedule.Controllers
             var user = await userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
+                logger.LogError($"Try to reset password: {model.Email}");
                 return View("ResetPasswordConfirmation");
             }
             var result = await userManager.ResetPasswordAsync(user, model.Code, model.Password);
             if (result.Succeeded)
             {
+                logger.LogWarning($"Reset password: {model.Email}");
                 return View("ResetPasswordConfirmation");
             }
             foreach (var error in result.Errors)

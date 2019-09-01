@@ -15,16 +15,17 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Language" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="2.2.0" />
-    <PackageReference Include="microsoft.entityframeworkcore.sqlserver" Version="2.2.0" />
-    <PackageReference Include="microsoft.entityframeworkcore.tools" Version="2.2.0">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="2.2.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="2.2.6" />
+    <PackageReference Include="microsoft.entityframeworkcore.sqlserver" Version="2.2.6" />
+    <PackageReference Include="microsoft.entityframeworkcore.tools" Version="2.2.6">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="Seq.Extensions.Logging" Version="4.0.1" />
   </ItemGroup>
 
 </Project>
