@@ -33,6 +33,7 @@ namespace Schedule.Models.JsonHelpers
             else
                 throw new ArgumentNullException($"Not found Group with name {name}");
         }
+
         public async Task<ResponseTeacherData> GetTeacher(int id)
         {
             var response = await GetResponse($"{baseUrl}teachers/{id}");
@@ -41,6 +42,18 @@ namespace Schedule.Models.JsonHelpers
             else
                 throw new ArgumentException($"Not found Teacher with id {id}");
         }
+
+        public async Task<ResponseLessonData> GetLesson(string groupName, string lessonName)
+        {
+            var lessons = await GetScheduleForGroup(groupName);
+            if (lessons == null)
+                return null;
+            return
+                 lessons.FirstOrDefault(lesson => lesson.FullName.Equals(lessonName) || lesson.LessonName.Equals(lessonName)) 
+                 ??
+                 lessons.FirstOrDefault(lesson => lesson.FullName.Contains(lessonName) || lesson.LessonName.Contains(lessonName));
+        }
+
         public async Task<ResponseTeacherData> GetTeacher(string name)
         {
             var response = await GetResponse($"{baseUrl}teachers/{name}");
