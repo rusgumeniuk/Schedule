@@ -2,6 +2,7 @@
 using Schedule.Models.JsonHelpers;
 using Schedule.ViewModels.Schedule;
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -59,10 +60,18 @@ namespace Schedule.Controllers
             {
                 if (!IsFullGroupName(inputedName))
                     throw new ArgumentNullException();
+                var lessons = await responseFactory.GetScheduleForGroup(inputedName);
+                var fav = new List<ResponseLessonDataForGroup>();
+                for (int i = 0; i < lessons.Count; ++i)
+                {
+                    if (i % 2 == 0)
+                        fav.Add(lessons[i]);
+                }
                 return View("GroupSchedule", new GroupScheduleViewModel()
                 {
                     Group = await responseFactory.GetGroup(inputedName),
-                    Lessons = await responseFactory.GetScheduleForGroup(inputedName)
+                    Lessons = lessons,
+                    FavouriteLessons = fav
                 }); //save order!
             }
             catch (ArgumentNullException)
