@@ -26,7 +26,7 @@ namespace Schedule.Models
             {
                 if (await userManager.FindByNameAsync(admins[i]) == null)
                 {
-                    User admin = new User { Email = admins[i], UserName = admins[i] };
+                    User admin = new User { Email = admins[i], UserName = admins[i], EmailConfirmed = true, GroupName = "ІТ-62" };
                     IdentityResult result = await userManager.CreateAsync(admin, admins[i + 1]);
                     if (result.Succeeded)
                     {
