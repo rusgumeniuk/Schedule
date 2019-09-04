@@ -3,14 +3,15 @@ using System.Collections.Generic;
 
 namespace Schedule.Models
 {
-    public class Building : Base
+    public class Building : IIdentifyingEntity<Guid>
     {
         public readonly ushort MAX_COUNT_OF_ROOMS_ON_STOREY = 600;
         public byte CountOfStoreys { get; set; } = 4;
         public byte Number { get; set; }
         public IList<Room> Rooms { get; set; } = new List<Room>();
+        public Guid Id { get; set; }
 
-        public Building(byte number) : base()
+        public Building(byte number)
         {
             Number = number;
         }

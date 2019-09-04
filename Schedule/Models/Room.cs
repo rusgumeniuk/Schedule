@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 
 namespace Schedule.Models
 {
-    public class Room : Base
+    public class Room : IIdentifyingEntity<ulong>, IFullNamedEntity
     {
         public ushort Number { get; set; }
+        public ulong Id { get; set; }
+        public string FullName { get; set; }
 
         public Room(ushort number) : base()
         {
